@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">    
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>    
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC&display=swap" rel="stylesheet">   
+    <title>Document</title>
+    <style>/* http://meyerweb.com/eric/tools/css/reset/ 
+        v2.0 | 20110126
+        License: none (public domain)
+     */
+     
+     html, body, div, span, applet, object, iframe,
+     h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+     a, abbr, acronym, address, big, cite, code,
+     del, dfn, em, img, ins, kbd, q, s, samp,
+     small, strike, strong, sub, sup, tt, var,
+     b, u, i, center,
+     dl, dt, dd, ol, ul, li,
+     fieldset, form, label, legend,
+     table, caption, tbody, tfoot, thead, tr, th, td,
+     article, aside, canvas, details, embed, 
+     figure, figcaption, footer, header, hgroup, 
+     menu, nav, output, ruby, section, summary,
+     time, mark, audio, video {
+         margin: 0;
+         padding: 0;
+         border: 0;
+         font-size: 100%;
+         font: inherit;
+         vertical-align: baseline;
+     }
+     /* HTML5 display-role reset for older browsers */
+     article, aside, details, figcaption, figure, 
+     footer, header, hgroup, menu, nav, section {
+         display: block;
+     }
+     body {
+         line-height: 1;
+     }
+     ol, ul {
+         list-style: none;
+     }
+     blockquote, q {
+         quotes: none;
+     }
+     blockquote:before, blockquote:after,
+     q:before, q:after {
+         content: '';
+         content: none;
+     }
+     table {
+         border-collapse: collapse;
+         border-spacing: 0;
+     }
+     
+     /* Custom Code */
+     </style>
+</head>
+<body>
+    <div id="main" class="container">
+        <textarea v-model="text" style="width: 400px; min-height: 200px;"></textarea>
+        <input type="button" value="轉換" @click="Split();">
+        <table class="table table-striped">
+            <thead>
+                <th v-for="col in mrow[0]">head</th>
+            </thead>
+            <tbody>
+                <tr v-for="row in mrow">
+                    <td v-for="col in row">{{col}}</td>
+                </tr>
+            </tbody>
+        </table>
+        
+    </div>
+     <!--Script-->   
+<script>
+    var Main = new Vue({
+        el: "#main",
+        data: {
+            mrow:[["empty"]],
+            text:""
+        },
+        created: function () {
+            //this.LoadData();                   
+        },
+        computed: {
+            // a computed getter
+            
+        },
+        methods: {
+            Split(shopid){
+                let orow = this.text.split("\n");
+                this.mrow = [];
+                let v = this;
+                orow.forEach(function(e){                    
+                    let ocol = e.split("\t");
+                    if(ocol.length > 0){
+                        //console.log(ocol);
+                        v.mrow.push(ocol);
+                    }
+                })
+            },            
+            SendEmail(email){
+                window.open('mailto:' + email + '?subject=庫存資料備份&body=###<br/>' + JSON.stringify(this.DBList) + "<br/>###");
+            }
+        }
+      });
+</script>
+</body>
+</html>
