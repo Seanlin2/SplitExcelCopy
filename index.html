@@ -9,108 +9,286 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>    
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC&display=swap" rel="stylesheet">   
+
+    <script src="jsPDF/dist/jspdf.min.js"></script>
+
     <title>Document</title>
-    <style>/* http://meyerweb.com/eric/tools/css/reset/ 
-        v2.0 | 20110126
-        License: none (public domain)
-     */
-     
-     html, body, div, span, applet, object, iframe,
-     h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-     a, abbr, acronym, address, big, cite, code,
-     del, dfn, em, img, ins, kbd, q, s, samp,
-     small, strike, strong, sub, sup, tt, var,
-     b, u, i, center,
-     dl, dt, dd, ol, ul, li,
-     fieldset, form, label, legend,
-     table, caption, tbody, tfoot, thead, tr, th, td,
-     article, aside, canvas, details, embed, 
-     figure, figcaption, footer, header, hgroup, 
-     menu, nav, output, ruby, section, summary,
-     time, mark, audio, video {
-         margin: 0;
-         padding: 0;
-         border: 0;
-         font-size: 100%;
-         font: inherit;
-         vertical-align: baseline;
-     }
-     /* HTML5 display-role reset for older browsers */
-     article, aside, details, figcaption, figure, 
-     footer, header, hgroup, menu, nav, section {
-         display: block;
-     }
-     body {
-         line-height: 1;
-     }
-     ol, ul {
-         list-style: none;
-     }
-     blockquote, q {
-         quotes: none;
-     }
-     blockquote:before, blockquote:after,
-     q:before, q:after {
-         content: '';
-         content: none;
-     }
-     table {
-         border-collapse: collapse;
-         border-spacing: 0;
-     }
-     
-     /* Custom Code */
-     </style>
+    <style>
+        /* http://meyerweb.com/eric/tools/css/reset/ 
+            v2.0 | 20110126
+            License: none (public domain)
+         */
+    
+        html,
+        body,
+        div,
+        span,
+        applet,
+        object,
+        iframe,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p,
+        blockquote,
+        pre,
+        a,
+        abbr,
+        acronym,
+        address,
+        big,
+        cite,
+        code,
+        del,
+        dfn,
+        em,
+        img,
+        ins,
+        kbd,
+        q,
+        s,
+        samp,
+        small,
+        strike,
+        strong,
+        sub,
+        sup,
+        tt,
+        var,
+        b,
+        u,
+        i,
+        center,
+        dl,
+        dt,
+        dd,
+        ol,
+        ul,
+        li,
+        fieldset,
+        form,
+        label,
+        legend,
+        table,
+        caption,
+        tbody,
+        tfoot,
+        thead,
+        tr,
+        th,
+        td,
+        article,
+        aside,
+        canvas,
+        details,
+        embed,
+        figure,
+        figcaption,
+        footer,
+        header,
+        hgroup,
+        menu,
+        nav,
+        output,
+        ruby,
+        section,
+        summary,
+        time,
+        mark,
+        audio,
+        video {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-size: 100%;
+            font: inherit;
+            vertical-align: baseline;
+        }
+    
+        /* HTML5 display-role reset for older browsers */
+        article,
+        aside,
+        details,
+        figcaption,
+        figure,
+        footer,
+        header,
+        hgroup,
+        menu,
+        nav,
+        section {
+            display: block;
+        }
+    
+        body {
+            line-height: 1;
+        }
+    
+        ol,
+        ul {
+            list-style: none;
+        }
+    
+        blockquote,
+        q {
+            quotes: none;
+        }
+    
+        blockquote:before,
+        blockquote:after,
+        q:before,
+        q:after {
+            content: '';
+            content: none;
+        }
+    
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+    
+        /* Custom Code */
+    </style>
 </head>
 <body>
     <div id="main" class="container">
         <textarea v-model="text" style="width: 400px; min-height: 200px;"></textarea>
         <input type="button" value="轉換" @click="Split();">
-        <table class="table table-striped">
-            <thead>
-                <th v-for="col in mrow[0]">head</th>
-            </thead>
-            <tbody>
-                <tr v-for="row in mrow">
-                    <td v-for="col in row">{{col}}</td>
-                </tr>
-            </tbody>
-        </table>
+        <button onclick="generatePDF();">Click to Generate PDF</button>
+                <button onclick="convert_HTML_To_PDF();">Convert HTML to PDF</button>
+                
+
+        <div id="contnet">
         
+            <table class="table table-striped">
+                <thead>
+                    <th v-for="col in mrow[0]">head</th>
+                    <th>Action</th>
+                </thead>
+                <tbody>
+                    <tr v-for="row in mrow">
+                        <td v-for="col in row">
+                            {{col}}
+        
+                        </td>
+                        <td>
+                            <input type="text" name="">
+                            <input type="button" value="計算">
+                        </td>
+                    </tr>
+                </tbody>
+            </table></div>
     </div>
      <!--Script-->   
 <script>
     var Main = new Vue({
         el: "#main",
         data: {
-            mrow:[["empty"]],
-            text:""
+            mrow: [["empty"]],
+            text: ""
         },
         created: function () {
             //this.LoadData();                   
         },
         computed: {
             // a computed getter
-            
+
         },
         methods: {
-            Split(shopid){
+            Split(shopid) {
                 let orow = this.text.split("\n");
                 this.mrow = [];
                 let v = this;
-                orow.forEach(function(e){                    
+                orow.forEach(function (e) {
                     let ocol = e.split("\t");
-                    if(ocol.length > 0){
+                    if (ocol.length > 0) {
                         //console.log(ocol);
                         v.mrow.push(ocol);
                     }
                 })
-            },            
-            SendEmail(email){
+            },
+            SendEmail(email) {
                 window.open('mailto:' + email + '?subject=庫存資料備份&body=###<br/>' + JSON.stringify(this.DBList) + "<br/>###");
             }
         }
-      });
+    });
+
+    /*
+    * Generate 2 pages PDF document
+    */
+    function generatePDF() {
+        var doc = new jsPDF();
+
+        doc.text(20, 20, 'Hello world!');
+        doc.text(20, 30, 'This is client-side Javascript to generate a PDF.');
+
+        doc.text(20, 40, 'This is the default font.');
+
+        doc.setFont("courier");
+        doc.setFontType("normal");
+        doc.text(20, 50, 'This is courier normal.');
+
+        doc.setFont("times");
+        doc.setFontType("italic");
+        doc.text(20, 60, 'This is times italic.');
+
+        doc.setFont("helvetica");
+        doc.setFontType("bold");
+        doc.text(20, 70, 'This is helvetica bold.');
+
+        doc.setFont("courier");
+        doc.setFontType("bolditalic");
+        doc.text(20, 80, 'This is courier bolditalic.');
+
+        doc.addPage();
+
+        doc.setFontSize(24);
+        doc.text(20, 20, 'This is a title');
+
+        doc.setFontSize(16);
+        doc.text(20, 30, 'This is some normal sized text underneath.');
+
+        doc.setTextColor(100);
+        doc.text(20, 40, 'This is gray.');
+
+        doc.setTextColor(150);
+        doc.text(20, 50, 'This is light gray.');
+
+        doc.setTextColor(255, 0, 0);
+        doc.text(20, 60, 'This is red.');
+
+        doc.setTextColor(0, 255, 0);
+        doc.text(20, 70, 'This is green.');
+
+        doc.setTextColor(0, 0, 255);
+        doc.text(20, 80, 'This is blue.');
+
+        // Save the PDF
+        doc.save('document.pdf');
+    }
+
+    /*
+     * Convert HTML content to PDF
+     */
+    function convert_HTML_To_PDF() {
+        var doc = new jsPDF();
+        var elementHTML = $('#contnet').html();
+        var specialElementHandlers = {
+            '#elementH': function (element, renderer) {
+                return true;
+            }
+        };
+        doc.fromHTML(elementHTML, 15, 15, {
+            'width': 170,
+            'elementHandlers': specialElementHandlers
+        });
+
+        // Save the PDF
+        doc.save('sample-document.pdf');
+    }
 </script>
 </body>
 </html>
